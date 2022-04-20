@@ -1,11 +1,7 @@
 
 import * as React from 'react';
 
-import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import { Grid, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/'
 
 import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
@@ -28,31 +24,31 @@ function App() {
   
 
   return (
-    <List
-      sx={style.list}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-      subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
-        </ListSubheader>
-      }
-    >
-      <ListItemButton>
-        <ListItemIcon>
-          <SendIcon />
-        </ListItemIcon>
-        <ListItemText primary="Start" />
-      </ListItemButton>
-      <ListItemButton>
-        <ListItemIcon>
-          <DraftsIcon />
-        </ListItemIcon>
-        <ListItemText primary="Load" />
-      </ListItemButton>
-      <EntityList name="Players" list={players} update={setPlayers} />
-      <EntityList name="Monsters" list={monsters} update={setMonsters} />
-    </List>
+    <Grid container>
+      <Grid item xs={4}>
+        <List
+          sx={style.list}
+          component="nav"
+          aria-labelledby="nested-list-subheader"
+        >
+          <ListItemButton>
+            <ListItemIcon>
+              <SendIcon />
+            </ListItemIcon>
+            <ListItemText primary="Start" />
+          </ListItemButton>
+          <ListItemButton>
+            <ListItemIcon>
+              <DraftsIcon />
+            </ListItemIcon>
+            <ListItemText primary="Load" />
+          </ListItemButton>
+          <EntityList name="Players" list={players} update={setPlayers} />
+          <EntityList name="Monsters" list={monsters} update={setMonsters} />
+        </List>
+      </Grid>
+      <Grid item xs={8}>hi</Grid>
+    </Grid>
   );
 }
 
