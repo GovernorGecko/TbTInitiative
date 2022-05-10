@@ -1,13 +1,14 @@
 
 import * as React from 'react';
 
-import { Grid, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/'
+import { Grid, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
 
 import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
 
 import Entity from './core/Entity';
-import EntityList from './components/EntityList';
+import EntityList from './components/EntityList'
+import Initiative from './core/Initiative';
 
 const style = {
   list: {
@@ -18,9 +19,11 @@ const style = {
 }
 
 function App() {
-
+  
   const [monsters, setMonsters] = React.useState([new Entity(0, "test")]);
   const [players, setPlayers] = React.useState([]);
+
+  const [initiative, setInitiative] = React.useState([new Initiative(monsters[0])]);
   
 
   return (
@@ -47,7 +50,13 @@ function App() {
           <EntityList name="Monsters" list={monsters} update={setMonsters} />
         </List>
       </Grid>
-      <Grid item xs={8}>hi</Grid>
+      <Grid item xs={8}>
+        <Grid container>
+          {
+            initiative.map((entity) => <Grid item>{entity.getName()}</Grid>)
+          }
+        </Grid>
+      </Grid>
     </Grid>
   );
 }
