@@ -1,9 +1,15 @@
-import Entity from "./Entity";
-
+/*
+    Represents an Entity in Initiative
+*/
 class Initiative {
   constructor(entity) {
     this._entityRef = entity;
     this._initiative = 0;
+  }
+
+  // Gets the Entity's Initiative
+  getInitiative() {
+    return this._initiative;
   }
 
   // Gets the Entity's name
@@ -11,8 +17,11 @@ class Initiative {
     return this._entityRef.getName();
   }
 
+  // Sets our initiative
   setInitiative(initiative) {
-    this._initiative = initiative;
+    if (typeof initiative === "number") {
+      this._initiative = initiative;
+    }
   }
 }
 

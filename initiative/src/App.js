@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import {
+  Button,
   Grid,
   List,
   ListItemButton,
@@ -24,6 +25,7 @@ const style = {
 };
 
 function App() {
+  const [inInitiative, setInInitiative] = useState(false);
   const [initiative, setInitiative] = useState([]);
   const [monsters, setMonsters] = useState([new Entity("test")]);
   const [players, setPlayers] = useState([]);
@@ -32,21 +34,26 @@ function App() {
   const addToInitiative = (entity) => {
     if (entity instanceof Entity) {
       let initiativeCopy = [...initiative];
-      initiativeCopy.push(entity);
+      initiativeCopy.push(new Initiative(entity));
       setInitiative(initiativeCopy);
     }
   };
 
-  //addToInitiative(monsters[0]);
+  // Handles Toggling Initiative
+  const handleToggleInitiative = () => {
+    // Not in Initiative yet?  Then iterate, rolling initiative.
+    if (!inInitiative) {
+      for (let i of initiative) {
+        console.log(i.getName());
+      }
+    }
+    setInInitiative(!inInitiative);
+  };
 
   return (
     <Grid container>
       <Grid item xs={4}>
-        <List
-          sx={style.list}
-          component="nav"
-          aria-labelledby="nested-list-subheader"
-        >
+        <List sx={style.list} component="nav">
           <ListItemButton>
             <ListItemIcon>
               <SendIcon />
@@ -74,9 +81,12 @@ function App() {
         </List>
       </Grid>
       <Grid item xs={8}>
+        <Button onClick={handleToggleInitiative}>Start Initiative</Button>
         <Grid container>
-          {initiative.map((entity) => (
-            <Grid item>{entity.getName()}</Grid>
+          {initiative.map((entity, index) => (
+            <Grid item xs={12} key={index}>
+              {entity.getName()} - {entity.getInitiative()}
+            </Grid>
           ))}
         </Grid>
       </Grid>

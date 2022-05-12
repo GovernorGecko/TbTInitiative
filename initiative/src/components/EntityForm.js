@@ -33,9 +33,7 @@ export const EntityForm = ({ open, handleClose, handleSave }) => {
     <Modal open={open} onClose={handleClose}>
       <Box sx={style.modal}>
         <TextField
-          id="outlined-basic"
-          label="Outlined"
-          variant="outlined"
+          label="Name"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
