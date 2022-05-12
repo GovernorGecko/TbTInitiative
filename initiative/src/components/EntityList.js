@@ -1,85 +1,92 @@
-
-import * as React from 'react';
+import React, { useState } from "react";
 
 import {
-  Box, Collapse, List, ListItemButton, ListItemIcon, ListItemText, Modal, Typography
-} from '@mui/material/';
+  Collapse,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material/";
 
-import AddIcon from '@mui/icons-material/Add';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import AddIcon from "@mui/icons-material/Add";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 
-import Entity from '../core/Entity';
+import Entity from "../core/Entity";
+import EntityForm from "./EntityForm";
 
 const style = {
   entity: {
-    pl: 4
-  }
-}
+    pl: 4,
+  },
+};
 
-const EntityList = ( { name, list, update, initiative } ) => {
+const EntityList = ({ name, list, setList, addToInitiative }) => {
+  const [expanded, setExpanded] = useState(true);
+  const [entityFormOpen, setEntityFormOpen] = useState(false);
 
-  const [open, setOpen] = React.useState(true);
-  const [newEntityFormOpen, setNewEntityFormOpen] = React.useState(false)
-
-  const handleClick = () => {
-    setOpen(!open);
+  // Expand our Menu
+  const handleExpand = () => {
+    setExpanded(!expanded);
   };
 
-  const handleOpenNewEntityForm = () => {
-    setNewEntityFormOpen(true)
-  }
+  // Open the Entity Form
+  const handleOpenEntityForm = () => {
+    setEntityFormOpen(true);
+  };
 
-  const handleCloseNewEntityForm = () => {
-    setNewEntityFormOpen(false)
-  }
+  // Close the Entity Form
+  const handleCloseEntityForm = () => {
+    setEntityFormOpen(false);
+  };
 
-  return (    
-      <>
-        <ListItemButton >
-            <ListItemIcon>
-                <AddIcon onClick={handleOpenNewEntityForm}/>
-                <Modal
-                  open={newEntityFormOpen}
-                  onClose={handleCloseNewEntityForm}
-                >
-                   <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                      Text in a modal
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                    </Typography>
-                  </Box>
-                </Modal>
-            </ListItemIcon>
-            <ListItemText primary={name} onClick={handleClick}/>
-            {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-        <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-            {
-              list.length > 0 ? 
-                list.map(entity => {
-                  if(entity instanceof Entity) {
-                    return (
-                      <ListItemButton sx={style.entity} key={entity.getId()}>
-                        <ListItemText primary={entity.getName()} />
-                        <ArrowForwardIcon />
-                      </ListItemButton>
-                    );
-                  }
-                  else {
-                    return null;
-                  }
+  // Save a new Entity
+  const handleSaveEntityForm = (entity) => {
+    handleCloseEntityForm();
+
+    // Create a shallow copy and update the list
+    let listCopy = [...list];
+    listCopy.push(entity);
+    setList(listCopy);
+  };
+
+  return (
+    <>
+      <ListItemButton>
+        <ListItemIcon>
+          <AddIcon onClick={handleOpenEntityForm} />
+          <EntityForm
+            open={entityFormOpen}
+            handleClose={handleCloseEntityForm}
+            handleSave={handleSaveEntityForm}
+          />
+        </ListItemIcon>
+        <ListItemText primary={name} onClick={handleExpand} />
+        {expanded ? <ExpandLess /> : <ExpandMore />}
+      </ListItemButton>
+      <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {list.length > 0
+            ? list.map((entity) => {
+                if (entity instanceof Entity) {
+                  return (
+                    <ListItemButton sx={style.entity} key={entity.getId()}>
+                      <ListItemText primary={entity.getName()} />
+                      <ArrowForwardIcon
+                        onClick={() => addToInitiative(entity)}
+                      />
+                    </ListItemButton>
+                  );
+                } else {
+                  return null;
                 }
-                ) : null
-            }
-            </List>
-        </Collapse>
-      </>
+              })
+            : null}
+        </List>
+      </Collapse>
+    </>
   );
-}
+};
 
-export default EntityList
+export default EntityList;

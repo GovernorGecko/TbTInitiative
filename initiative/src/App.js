@@ -1,30 +1,43 @@
+import React, { useState } from "react";
 
-import * as React from 'react';
+import {
+  Grid,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material/";
 
-import { Grid, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material/';
+import DraftsIcon from "@mui/icons-material/Drafts";
+import SendIcon from "@mui/icons-material/Send";
 
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
-
-import Entity from './core/Entity';
-import EntityList from './components/EntityList'
-import Initiative from './core/Initiative';
+import Entity from "./core/Entity";
+import EntityList from "./components/EntityList";
+import Initiative from "./core/Initiative";
 
 const style = {
   list: {
-    width: '100%',
+    width: "100%",
     maxWidth: 360,
-    bgcolor: 'background.paper'
-  }
-}
+    bgcolor: "background.paper",
+  },
+};
 
 function App() {
-  
-  const [monsters, setMonsters] = React.useState([new Entity(0, "test")]);
-  const [players, setPlayers] = React.useState([]);
+  const [initiative, setInitiative] = useState([]);
+  const [monsters, setMonsters] = useState([new Entity("test")]);
+  const [players, setPlayers] = useState([]);
 
-  const [initiative, setInitiative] = React.useState([new Initiative(monsters[0])]);
-  
+  // Add an Entity to our Initiative
+  const addToInitiative = (entity) => {
+    if (entity instanceof Entity) {
+      let initiativeCopy = [...initiative];
+      initiativeCopy.push(entity);
+      setInitiative(initiativeCopy);
+    }
+  };
+
+  //addToInitiative(monsters[0]);
 
   return (
     <Grid container>
@@ -46,20 +59,29 @@ function App() {
             </ListItemIcon>
             <ListItemText primary="Load" />
           </ListItemButton>
-          <EntityList name="Players" list={players} update={setPlayers} />
-          <EntityList name="Monsters" list={monsters} update={setMonsters} />
+          <EntityList
+            name="Players"
+            list={players}
+            setList={setPlayers}
+            addToInitiative={addToInitiative}
+          />
+          <EntityList
+            name="Monsters"
+            list={monsters}
+            setList={setMonsters}
+            addToInitiative={addToInitiative}
+          />
         </List>
       </Grid>
       <Grid item xs={8}>
         <Grid container>
-          {
-            initiative.map((entity) => <Grid item>{entity.getName()}</Grid>)
-          }
+          {initiative.map((entity) => (
+            <Grid item>{entity.getName()}</Grid>
+          ))}
         </Grid>
       </Grid>
     </Grid>
   );
 }
-
 
 export default App;

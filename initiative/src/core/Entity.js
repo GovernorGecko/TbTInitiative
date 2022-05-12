@@ -1,18 +1,21 @@
+/*
+  Entity
+*/
 class Entity {
+  static lastKey = 0;
 
-    constructor(id, name) {
-      this._id = id;
-      this._name = name;
-    }
-
-    getId() {
-      return this._id
-    }
-
-    getName() {
-      return this._name
-    }
-
+  constructor(name) {
+    this._id = ++Entity.lastKey;
+    this._name = name;
   }
+
+  getId() {
+    return this._id;
+  }
+
+  getName() {
+    return this._name;
+  }
+}
 
 export default Entity;
