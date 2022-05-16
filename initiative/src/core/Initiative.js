@@ -7,6 +7,11 @@ class Initiative {
     this._initiative = 0;
   }
 
+  // Gets the Entity's ID
+  getId() {
+    return this._entityRef.getId();
+  }
+
   // Gets the Entity's Initiative
   getInitiative() {
     return this._initiative;

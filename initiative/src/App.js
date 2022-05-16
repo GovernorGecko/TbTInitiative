@@ -14,7 +14,9 @@ import SendIcon from "@mui/icons-material/Send";
 
 import Entity from "./core/Entity";
 import EntityList from "./components/EntityList";
+import { GroupBygetId } from "./core/Helpers";
 import Initiative from "./core/Initiative";
+import InitiativeWidget from "./components/widgets/InitiativeWidget";
 
 const style = {
   list: {
@@ -43,8 +45,14 @@ function App() {
   const handleToggleInitiative = () => {
     // Not in Initiative yet?  Then iterate, rolling initiative.
     if (!inInitiative) {
-      for (let i of initiative) {
-        console.log(i.getName());
+      // Group our Initiative's by their Entity Ids
+      let groupedIds = GroupBygetId(initiative);
+
+      // Iterate our Groups
+      for (let id of Object.keys(groupedIds)) {
+        for (let entities of groupedIds[id]) {
+          console.log(entities);
+        }
       }
     }
     setInInitiative(!inInitiative);
@@ -82,13 +90,9 @@ function App() {
       </Grid>
       <Grid item xs={8}>
         <Button onClick={handleToggleInitiative}>Start Initiative</Button>
-        <Grid container>
-          {initiative.map((entity, index) => (
-            <Grid item xs={12} key={index}>
-              {entity.getName()} - {entity.getInitiative()}
-            </Grid>
-          ))}
-        </Grid>
+        {initiative.map((entity, index) => (
+          <InitiativeWidget key={index} entity={entity} />
+        ))}
       </Grid>
     </Grid>
   );
